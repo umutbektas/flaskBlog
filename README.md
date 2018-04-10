@@ -1,4 +1,4 @@
 # flaskBlog
-Basit bir Flask bloğudur. <br/>
+Basit bir Flask blogudur. <br/>
 
 Blog tamamlanınca gerekli kurulum adımları eklenecek.
