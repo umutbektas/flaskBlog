@@ -1,0 +1,25 @@
+{% extends "layouts/layout.html" %}
+{% block title %}
+    Kayıt Ol
+{% endblock title %}
+
+{% block body %}
+       {% from "layouts/formhelpers.html" import render_field %}
+
+    <h3>Kayıt Ol</h3>
+    <hr>
+<div class="col-lg-6">
+
+<form class="form-group" method=post>
+    {{ render_field(form.name, class = "form-control") }}
+    {{ render_field(form.username, class = "form-control") }}
+    {{ render_field(form.email, class = "form-control") }}
+    {{ render_field(form.password, class = "form-control") }}
+    {{ render_field(form.passconfirm, class = "form-control") }}
+
+<button type="submit" class="btn btn-primary">Kayıt Ol</button>
+</form>
+
+</div>
+
+{% endblock %}

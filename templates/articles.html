@@ -1,0 +1,33 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}
+    Blog Articles
+{% endblock title %}
+
+{% block body %}
+    <h3>Makaleler</h3>
+    <hr>
+
+    {% if articles %}
+  {% for article in articles %}
+      <div class="list-group">
+            <a href="articles/{{ article.id }}" class="list-group-item list-group-item-action flex-column align-items-start">
+
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ article.title }}</h5>
+                    <small class="text-muted">{{ article.created_date }}</small>
+                </div>
+                <p class="mb-1">{{ article.content }}</p>
+                    <small class="text-muted">{{ article.author }}</small>
+            </a>
+      </div>
+
+  {% endfor %}
+
+     {% else %}
+        <div class="alert alert-warning">
+            Henüz Makale eklenmemiş.
+        </div>
+    {% endif %}
+{% endblock %}
+

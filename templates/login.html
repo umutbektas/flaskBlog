@@ -1,0 +1,23 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}
+    Giriş Yap
+{% endblock %}
+
+{% block body %}
+<h3>Giriş Yap</h3>
+    <hr>
+       {% from "layouts/formhelpers.html" import render_field %}
+
+<div class="col-lg-6">
+<form class="form-group" method=post>
+    {{ render_field(form.username, class = "form-control") }}
+    {{ render_field(form.password, class = "form-control") }}
+
+<input type="hidden" value="{{ request.args.get('next') }}"/>
+<button type="submit" class="btn btn-primary">Giriş Yap</button>
+</form>
+
+</div>
+
+{% endblock %}
