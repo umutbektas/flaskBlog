@@ -65,8 +65,16 @@ def about():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    username = session["username"]
+    cursor = mysql.connection.cursor()
+    sqlquery = "SELECT * FROM articles where author = %s"
+    result = cursor.execute(sqlquery, (username,))
 
-    return render_template("dashboard.html")
+    if result > 0:
+        articles = cursor.fetchall()
+        return render_template("dashboard.html", articles=articles)
+    else:
+        return render_template("dashboard.html")
 
 @app.route('/articles')
 def articles():
