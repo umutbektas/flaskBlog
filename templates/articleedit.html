@@ -1,0 +1,31 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}
+    Makale Düzenle
+{% endblock %}
+
+{% block body %}
+ {% if form %}
+    <h3>Makale Düzenle</h3>
+    <hr>
+
+    {% from "layouts/formhelpers.html" import render_field %}
+
+<div class="col-lg-8">
+<form class="form-group" method=post>
+    {{ render_field(form.title, class = "form-control") }}
+    {{ render_field(form.content, class = "form-control", rows="8") }}
+
+
+<button type="submit" class="btn btn-primary">Makale Düzenle</button>
+</form>
+
+</div>
+<script src="https://cdn.ckeditor.com/4.9.1/standard/ckeditor.js"></script>
+    <script> CKEDITOR.replace( 'content' ); </script>
+
+ {% else %}
+
+     <div class="alert alert-danger"> Böyle bir makale yok.</div>
+ {% endif %}
+{% endblock %}

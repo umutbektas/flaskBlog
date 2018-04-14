@@ -88,11 +88,74 @@ def articles():
     else:
          return render_template("articles.html")
 
+#article detail page
 @app.route('/articles/<string:id>')
 def detail(id):
-    return id
+    cursor = mysql.connection.cursor()
+    sqlquery = "SELECT * FROM articles WHERE id = %s"
+    result = cursor.execute(sqlquery, (id,))
 
-@app.route('/register', methods= ["GET", "POST"])
+    if result > 0:
+        article = cursor.fetchone()
+        return render_template("articledetail.html", article=article)
+    else:
+        return render_template("articledetail.html")
+
+
+
+@app.route('/articles/edit/<string:id>', methods = ["GET", "POST"])
+@login_required
+def edit(id):
+    if request.method == "GET":
+        cursor = mysql.connection.cursor()
+        username = session["username"]
+        sqlquery = "SELECT * FROM articles WHERE id = %s AND author = %s"
+        result = cursor.execute(sqlquery, (id,username))
+
+        if result > 0:
+            article = cursor.fetchone()
+            form = ArticleForm()
+            form.title.data = article["title"]
+            form.content.data = article["content"]
+            return render_template("articleedit.html", form=form)
+        else:
+            flash("Bu makale yok veya size ait değil.")
+            return redirect(url_for("dashboard"))
+    else:
+        form = ArticleForm(request.form)
+        newTitle = form.title.data
+        newContent = form.content.data
+
+        sqlquery2 = "UPDATE articles SET title = %s, content = %s WHERE id = %s"
+        cursor = mysql.connection.cursor()
+        cursor.execute(sqlquery2, (newTitle, newContent, id))
+        mysql.connection.commit()
+        flash("Başarıyla Güncellendi", "success")
+        return redirect(url_for("dashboard"))
+
+        pass
+@app.route('/articles/delete/<string:id>')
+@login_required
+def delete(id):
+    cursor = mysql.connection.cursor()
+    username = session["username"]
+    sqlquery = "SELECT * FROM articles WHERE id = %s AND author = %s"
+
+    result = cursor.execute(sqlquery, (id, username))
+
+    if result > 0:
+        deletequery = "DELETE FROM articles WHERE id = %s"
+        cursor.execute(deletequery, (id,))
+        mysql.connection.commit()
+        flash("Başarıyla silindi !", "success")
+        return redirect(url_for("dashboard"))
+
+    else:
+        flash("Silinemedi, böyle bir makale bulunmuyor veya size ait değil.", "danger")
+        return redirect(url_for("dashboard"))
+
+
+@app.route('/register', methods = ["GET", "POST"])
 def register():
     form = RegisterForm(request.form)
     if request.method == "POST" and form.validate():
@@ -190,6 +253,16 @@ def addarticle():
 
     else:
         return render_template("addarticle.html", form=form)
+
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "GET":
+        return redirect(url_for("index"))
+    else:
+        searchkey = request.form.get("searchkey")
+        cursor = mysql.connection.cursor()
+        pass
 
 #run app
 if __name__ == "__main__":
