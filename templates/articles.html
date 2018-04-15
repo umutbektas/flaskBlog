@@ -17,7 +17,7 @@
                     <h5 class="mb-1">{{ article.title }}</h5>
                     <small class="text-muted">{{ article.created_date }}</small>
                 </div>
-                <p class="mb-1">{{ article.content }}</p>
+                <p class="mb-1">{{ article.content|safe }}</p>
                     <small class="text-muted">{{ article.author }}</small>
             </a>
       </div>

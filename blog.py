@@ -67,7 +67,7 @@ def about():
 def dashboard():
     username = session["username"]
     cursor = mysql.connection.cursor()
-    sqlquery = "SELECT * FROM articles where author = %s"
+    sqlquery = "SELECT * FROM articles where author = %s ORDER BY created_date DESC"
     result = cursor.execute(sqlquery, (username,))
 
     if result > 0:
@@ -79,7 +79,7 @@ def dashboard():
 @app.route('/articles')
 def articles():
     cursor = mysql.connection.cursor()
-    sqlquery = "SELECT * FROM articles"
+    sqlquery = "SELECT * FROM articles ORDER BY created_date DESC"
     result = cursor.execute(sqlquery)
 
     if result > 0:
@@ -92,7 +92,7 @@ def articles():
 @app.route('/articles/<string:id>')
 def detail(id):
     cursor = mysql.connection.cursor()
-    sqlquery = "SELECT * FROM articles WHERE id = %s"
+    sqlquery = "SELECT * FROM articles WHERE id = %s ORDER BY created_date DESC"
     result = cursor.execute(sqlquery, (id,))
 
     if result > 0:
@@ -262,7 +262,17 @@ def search():
     else:
         searchkey = request.form.get("searchkey")
         cursor = mysql.connection.cursor()
-        pass
+        sqlquery = "SELECT * FROM articles WHERE title LIKE '%"+ searchkey +"%' OR content LIKE '%"+ searchkey +"%' ORDER BY created_date DESC"
+        result = cursor.execute(sqlquery)
+
+        if result > 0:
+            articles = cursor.fetchall()
+            flash("Arama başarılı! Aradığımız: " + searchkey, "success")
+            return render_template("articles.html", articles=articles)
+
+        else:
+            flash("Aranan kelimeye ait içerik bulunamadı.", "warning")
+            return redirect(url_for("index"))
 
 #run app
 if __name__ == "__main__":

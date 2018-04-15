@@ -20,7 +20,9 @@
 
 </div>
 <script src="https://cdn.ckeditor.com/4.9.1/standard/ckeditor.js"></script>
-    <script> CKEDITOR.replace( 'content' ); </script>
+<script> CKEDITOR.replace( 'content', {
+        allowedContent : true;
+    } ); </script>
 
 
 {% endblock %}
